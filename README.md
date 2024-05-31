@@ -2,7 +2,7 @@
 <h3 align="center">Web-development for a fiscally sponsored, project-based organization advocating for reproductive justice in Chester county</h3>
 
 ```
-[thejaneproj.com](https://www.thejaneproj.com/)
+[https://www.thejaneproj.com/](https://www.thejaneproj.com/)
 ```
 
 - 🗺️ See the [integrated frame displaying geospatial data related to Crisis Pregnancy Centers](https://www.thejaneproj.com/the-cpc-issue)
