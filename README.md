@@ -1,5 +1,5 @@
 <h1 align="center">The Jane Project Website</h1>
-<h3 align="center">Web-development for a fiscally sponsored, project-based organization advocating for reproductive justice in Chester county</h3>
+<h3 align="center">Web-development for a fiscally sponsored, project-based organization that advocates for reproductive justice in Chester county</h3>
 
 ```
 https://www.thejaneproj.com/
