@@ -2,31 +2,30 @@
 
 An open-source advocacy platform empowering communities with accurate information, geospatial data visualization, and AI-powered fact-checking for reproductive health awareness.
 
-## 🌟 Features
+## Features
 
-### 🗺️ Geospatial Data Visualization
+### Geospatial Data Visualization
 - **Interactive Maps**: Powered by Leaflet.js with real-time data
 - **Crisis Pregnancy Center Database**: Comprehensive location and service information
 - **Advanced Filtering**: Search by location, services, and fact-check scores
 - **Geocoding**: Automatic address-to-coordinate conversion
 
-### 🤖 AI-Powered Analysis
+### CPC Analysis
 - **Content Classification**: ML-based categorization using scikit-learn
 - **Sentiment Analysis**: Emotional tone and bias detection
 - **Fact-Checking**: Automated misinformation detection algorithms
 - **AI Content Generation**: OpenAI-powered fact-checked alternatives
 
-### 📊 Data Management
+### Data Management
 - **SQLite Database**: Lightweight, portable data storage
 - **RESTful API**: Clean endpoints for data access and manipulation
 - **Data Validation**: Comprehensive input validation and sanitization
 - **Export Capabilities**: Data export in multiple formats
 
-### 🎨 Modern User Interface
+### Modern User Interface
 - **Responsive Design**: Mobile-first Bootstrap 5 implementation
 - **Interactive Charts**: Chart.js integration for data visualization
 - **Accessibility**: WCAG compliant design patterns
-- **Progressive Enhancement**: Works without JavaScript
 
 
 ## 📁 Project Structure
