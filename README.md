@@ -61,7 +61,7 @@ janeProj/
 - **Information Enhancement**: AI-powered content improvement
 - **Bias Detection**: Advanced language model analysis
 
-## 🗄️ Database Schema
+## 🗄Database Schema
 
 ### CPCCenter Model
 ```python
