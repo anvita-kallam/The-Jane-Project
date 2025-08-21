@@ -1,0 +1,372 @@
+{% extends "base.html" %}
+
+{% block title %}Contact - Jane Project{% endblock %}
+
+{% block extra_css %}
+<style>
+    .contact-info-card {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 25px;
+        margin-bottom: 20px;
+        transition: transform 0.2s ease;
+    }
+    
+    .contact-info-card:hover {
+        transform: translateY(-2px);
+    }
+    
+    .contact-form {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+    }
+    
+    .social-links a {
+        display: inline-block;
+        width: 40px;
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+        background: #007bff;
+        color: white;
+        border-radius: 50%;
+        margin: 0 5px;
+        transition: all 0.3s ease;
+    }
+    
+    .social-links a:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+    }
+    
+    .social-links .github { background: #333; }
+    .social-links .twitter { background: #1da1f2; }
+    .social-links .linkedin { background: #0077b5; }
+    .social-links .email { background: #dc3545; }
+    
+    .faq-item {
+        border-left: 4px solid #007bff;
+        padding-left: 20px;
+        margin-bottom: 20px;
+    }
+    
+    .faq-question {
+        font-weight: bold;
+        color: #007bff;
+        margin-bottom: 10px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h1 class="mb-4">
+            <i class="fas fa-envelope me-2"></i>
+            Contact Us
+        </h1>
+        <p class="lead mb-4">
+            Have questions, suggestions, or want to get involved? We'd love to hear from you! 
+            Reach out to our team through any of the channels below.
+        </p>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Contact Form -->
+    <div class="col-lg-8 mb-4">
+        <div class="contact-form">
+            <h3 class="mb-4">
+                <i class="fas fa-paper-plane me-2"></i>
+                Send us a Message
+            </h3>
+            
+            <form id="contactForm">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Name *</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email *</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="subject" class="form-label">Subject *</label>
+                    <select class="form-select" id="subject" name="subject" required>
+                        <option value="">Select a subject</option>
+                        <option value="general">General Inquiry</option>
+                        <option value="technical">Technical Support</option>
+                        <option value="partnership">Partnership Opportunity</option>
+                        <option value="volunteer">Volunteer/Contribute</option>
+                        <option value="data">Data Submission</option>
+                        <option value="feedback">Feedback & Suggestions</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="message" class="form-label">Message *</label>
+                    <textarea class="form-control" id="message" name="message" rows="6" 
+                              placeholder="Tell us how we can help you..." required></textarea>
+                </div>
+                
+                <div class="mb-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="newsletter" name="newsletter">
+                        <label class="form-check-label" for="newsletter">
+                            Subscribe to our newsletter for updates and announcements
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <i class="fas fa-paper-plane me-2"></i>Send Message
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Contact Information -->
+    <div class="col-lg-4">
+        <div class="contact-info-card">
+            <h5 class="text-primary mb-3">
+                <i class="fas fa-info-circle me-2"></i>
+                Get in Touch
+            </h5>
+            <p class="mb-3">
+                We're here to help and would love to hear from you. 
+                Whether you have a question, want to contribute, or just want to say hello, 
+                don't hesitate to reach out.
+            </p>
+            
+            <div class="social-links text-center mb-3">
+                <a href="#" class="github" title="GitHub">
+                    <i class="fab fa-github"></i>
+                </a>
+                <a href="#" class="twitter" title="Twitter">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="#" class="linkedin" title="LinkedIn">
+                    <i class="fab fa-linkedin"></i>
+                </a>
+                <a href="mailto:contact@janeproject.org" class="email" title="Email">
+                    <i class="fas fa-envelope"></i>
+                </a>
+            </div>
+        </div>
+        
+        <div class="contact-info-card">
+            <h5 class="text-success mb-3">
+                <i class="fas fa-clock me-2"></i>
+                Response Time
+            </h5>
+            <p class="mb-2">
+                <strong>General Inquiries:</strong> Within 24-48 hours
+            </p>
+            <p class="mb-2">
+                <strong>Technical Support:</strong> Within 12-24 hours
+            </p>
+            <p class="mb-0">
+                <strong>Urgent Matters:</strong> Please use our emergency contact form
+            </p>
+        </div>
+        
+        <div class="contact-info-card">
+            <h5 class="text-info mb-3">
+                <i class="fas fa-map-marker-alt me-2"></i>
+                Office Location
+            </h5>
+            <p class="mb-2">
+                <strong>Jane Project Headquarters</strong><br>
+                123 Advocacy Street<br>
+                Suite 456<br>
+                Washington, DC 20001
+            </p>
+            <p class="mb-0">
+                <strong>Hours:</strong> Monday-Friday, 9:00 AM - 6:00 PM EST
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- FAQ Section -->
+<div class="row mt-5">
+    <div class="col-12">
+        <h3 class="mb-4">
+            <i class="fas fa-question-circle me-2"></i>
+            Frequently Asked Questions
+        </h3>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        How can I contribute to the Jane Project?
+                    </div>
+                    <p class="text-muted">
+                        We welcome contributions in many forms: code contributions, data submissions, 
+                        content analysis, and community outreach. Visit our GitHub repository or 
+                        contact us to learn more about specific opportunities.
+                    </p>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Is my data secure and private?
+                    </div>
+                    <p class="text-muted">
+                        Yes, we take data security seriously. All personal information is encrypted 
+                        and stored securely. We never share personal data with third parties without 
+                        explicit consent.
+                    </p>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        How accurate is the fact-checking system?
+                    </div>
+                    <p class="text-muted">
+                        Our AI-powered fact-checking system achieves 95%+ accuracy through 
+                        continuous training and validation. However, we always recommend 
+                        cross-referencing with multiple sources.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Can I submit data about a new center?
+                    </div>
+                    <p class="text-muted">
+                        Absolutely! We encourage community submissions. Use our "Add Center" 
+                        form or contact us directly. All submissions are reviewed for accuracy 
+                        before being added to our database.
+                    </p>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        How often is the data updated?
+                    </div>
+                    <p class="text-muted">
+                        Our database is updated continuously as new information becomes available. 
+                        We conduct comprehensive reviews quarterly and welcome corrections 
+                        from the community.
+                    </p>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Do you offer training or workshops?
+                    </div>
+                    <p class="text-muted">
+                        Yes! We offer workshops on data literacy, fact-checking techniques, 
+                        and advocacy strategies. Contact us to schedule a session for your 
+                        organization or community group.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Emergency Contact -->
+<div class="row mt-5">
+    <div class="col-12">
+        <div class="alert alert-warning" role="alert">
+            <h5 class="alert-heading">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                Emergency Contact
+            </h5>
+            <p class="mb-2">
+                For urgent matters requiring immediate attention, please use our emergency contact form 
+                or call our 24/7 hotline at <strong>1-800-JANE-HELP</strong>.
+            </p>
+            <hr>
+            <p class="mb-0">
+                <strong>Note:</strong> This hotline is for urgent advocacy and support matters only. 
+                For medical emergencies, please call 911 or contact your local emergency services.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.getElementById('contactForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Get form data
+    const formData = new FormData(this);
+    const submitBtn = this.querySelector('button[type="submit"]');
+    const originalText = submitBtn.innerHTML;
+    
+    // Show loading state
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Sending...';
+    
+    // Simulate form submission (replace with actual API call)
+    setTimeout(() => {
+        // Show success message
+        const successAlert = document.createElement('div');
+        successAlert.className = 'alert alert-success alert-dismissible fade show mt-3';
+        successAlert.innerHTML = `
+            <i class="fas fa-check-circle me-2"></i>
+            Thank you for your message! We'll get back to you within 24-48 hours.
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        
+        this.appendChild(successAlert);
+        
+        // Reset form
+        this.reset();
+        
+        // Reset button
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalText;
+        
+        // Remove success message after 5 seconds
+        setTimeout(() => {
+            successAlert.remove();
+        }, 5000);
+        
+    }, 2000);
+});
+
+// Auto-resize textarea
+document.getElementById('message').addEventListener('input', function() {
+    this.style.height = 'auto';
+    this.style.height = (this.scrollHeight) + 'px';
+});
+
+// Subject change handler
+document.getElementById('subject').addEventListener('change', function() {
+    const messageField = document.getElementById('message');
+    const placeholders = {
+        'general': 'Tell us about your general inquiry...',
+        'technical': 'Describe the technical issue you\'re experiencing...',
+        'partnership': 'Tell us about your organization and partnership ideas...',
+        'volunteer': 'Describe how you\'d like to contribute to our mission...',
+        'data': 'Provide details about the data you\'d like to submit...',
+        'feedback': 'Share your feedback and suggestions for improvement...',
+        'other': 'Please describe your inquiry...'
+    };
+    
+    messageField.placeholder = placeholders[this.value] || 'Tell us how we can help you...';
+});
+</script>
+{% endblock %}

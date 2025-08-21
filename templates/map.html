@@ -1,0 +1,384 @@
+{% extends "base.html" %}
+
+{% block title %}Interactive Map - Jane Project{% endblock %}
+
+{% block extra_css %}
+<style>
+    #map {
+        height: 600px;
+        width: 100%;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .map-controls {
+        background: white;
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
+    
+    .center-info {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-top: 20px;
+    }
+    
+    .filter-section {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h1 class="mb-4">
+            <i class="fas fa-map-marked-alt me-2"></i>
+            Interactive Map
+        </h1>
+        <p class="lead mb-4">
+            Explore Crisis Pregnancy Centers across the country with detailed information, 
+            service offerings, and fact-checking scores.
+        </p>
+    </div>
+</div>
+
+<!-- Map Controls -->
+<div class="map-controls">
+    <div class="row align-items-center">
+        <div class="col-md-4">
+            <label for="searchInput" class="form-label">Search Centers:</label>
+            <input type="text" id="searchInput" class="form-control" placeholder="Enter center name or address...">
+        </div>
+        <div class="col-md-3">
+            <label for="serviceFilter" class="form-label">Filter by Service:</label>
+            <select id="serviceFilter" class="form-select">
+                <option value="">All Services</option>
+                <option value="pregnancy_test">Pregnancy Tests</option>
+                <option value="ultrasound">Ultrasounds</option>
+                <option value="counseling">Counseling</option>
+                <option value="adoption">Adoption Info</option>
+                <option value="material_aid">Material Aid</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label for="factCheckFilter" class="form-label">Fact Check Score:</label>
+            <select id="factCheckFilter" class="form-select">
+                <option value="">All Scores</option>
+                <option value="high">High (80%+)</option>
+                <option value="medium">Medium (60-79%)</option>
+                <option value="low">Low (<60%)</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <button id="resetFilters" class="btn btn-outline-secondary w-100">
+                <i class="fas fa-undo me-1"></i>Reset
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Map Container -->
+<div class="row">
+    <div class="col-md-8">
+        <div id="map"></div>
+    </div>
+    <div class="col-md-4">
+        <div class="center-info">
+            <h5><i class="fas fa-info-circle me-2"></i>Center Information</h5>
+            <div id="centerDetails">
+                <p class="text-muted">Click on a marker to view center details</p>
+            </div>
+        </div>
+        
+        <div class="filter-section">
+            <h6><i class="fas fa-filter me-2"></i>Quick Stats</h6>
+            <div class="row text-center">
+                <div class="col-6">
+                    <div class="border-end">
+                        <h4 id="totalCenters" class="text-primary">0</h4>
+                        <small class="text-muted">Total Centers</small>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <h4 id="visibleCenters" class="text-success">0</h4>
+                    <small class="text-muted">Visible</small>
+                </div>
+            </div>
+        </div>
+        
+        <div class="filter-section">
+            <h6><i class="fas fa-chart-pie me-2"></i>Service Distribution</h6>
+            <canvas id="serviceChart" width="200" height="200"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- Legend -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h6 class="card-title"><i class="fas fa-legend me-2"></i>Map Legend</h6>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="d-flex align-items-center">
+                            <div class="legend-marker bg-success me-2" style="width: 20px; height: 20px; border-radius: 50%;"></div>
+                            <span>High Fact Check Score (80%+)</span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="d-flex align-items-center">
+                            <div class="legend-marker bg-warning me-2" style="width: 20px; height: 20px; border-radius: 50%;"></div>
+                            <span>Medium Fact Check Score (60-79%)</span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="d-flex align-items-center">
+                            <div class="legend-marker bg-danger me-2" style="width: 20px; height: 20px; border-radius: 50%;"></div>
+                            <span>Low Fact Check Score (<60%)</span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="d-flex align-items-center">
+                            <div class="legend-marker bg-secondary me-2" style="width: 20px; height: 20px; border-radius: 50%;"></div>
+                            <span>No Score Available</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let map;
+let markers = [];
+let centersData = [];
+
+// Initialize map
+function initMap() {
+    // Center on US (roughly)
+    map = L.map('map').setView([39.8283, -98.5795], 4);
+    
+    // Add OpenStreetMap tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+    
+    // Load centers data
+    loadCentersData();
+}
+
+// Load centers data from API
+async function loadCentersData() {
+    try {
+        const response = await fetch('/api/centers');
+        centersData = await response.json();
+        displayCenters(centersData);
+        updateStats();
+        updateServiceChart();
+    } catch (error) {
+        console.error('Error loading centers:', error);
+    }
+}
+
+// Display centers on map
+function displayCenters(centers) {
+    // Clear existing markers
+    markers.forEach(marker => map.removeLayer(marker));
+    markers = [];
+    
+    centers.forEach(center => {
+        const markerColor = getMarkerColor(center.fact_check_score);
+        
+        const marker = L.circleMarker([center.latitude, center.longitude], {
+            radius: 8,
+            fillColor: markerColor,
+            color: '#fff',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(map);
+        
+        // Create popup content
+        const popupContent = `
+            <div class="text-center">
+                <h6 class="mb-2">${center.name}</h6>
+                <p class="mb-1"><small>${center.address}</small></p>
+                ${center.phone ? `<p class="mb-1"><small>📞 ${center.phone}</small></p>` : ''}
+                ${center.website ? `<p class="mb-1"><small>🌐 <a href="${center.website}" target="_blank">Website</a></small></p>` : ''}
+                ${center.fact_check_score ? `<p class="mb-0"><small>✅ Fact Check: ${(center.fact_check_score * 100).toFixed(0)}%</small></p>` : ''}
+            </div>
+        `;
+        
+        marker.bindPopup(popupContent);
+        
+        // Add click event for detailed info
+        marker.on('click', () => showCenterDetails(center));
+        
+        markers.push(marker);
+    });
+}
+
+// Get marker color based on fact check score
+function getMarkerColor(score) {
+    if (!score) return '#6c757d'; // gray
+    if (score >= 0.8) return '#28a745'; // green
+    if (score >= 0.6) return '#ffc107'; // yellow
+    return '#dc3545'; // red
+}
+
+// Show center details in sidebar
+function showCenterDetails(center) {
+    const detailsDiv = document.getElementById('centerDetails');
+    
+    const services = center.services ? center.services.split('\n').map(s => `<li>${s}</li>`).join('') : '<li>No services listed</li>';
+    
+    detailsDiv.innerHTML = `
+        <h6 class="text-primary">${center.name}</h6>
+        <p class="mb-2"><i class="fas fa-map-marker-alt me-2"></i>${center.address}</p>
+        ${center.phone ? `<p class="mb-2"><i class="fas fa-phone me-2"></i>${center.phone}</p>` : ''}
+        ${center.website ? `<p class="mb-2"><i class="fas fa-globe me-2"></i><a href="${center.website}" target="_blank">${center.website}</a></p>` : ''}
+        <div class="mb-3">
+            <strong>Services:</strong>
+            <ul class="list-unstyled ms-3">
+                ${services}
+            </ul>
+        </div>
+        ${center.fact_check_score ? `
+            <div class="alert alert-${center.fact_check_score >= 0.8 ? 'success' : center.fact_check_score >= 0.6 ? 'warning' : 'danger'}">
+                <strong>Fact Check Score:</strong> ${(center.fact_check_score * 100).toFixed(0)}%
+            </div>
+        ` : '<div class="alert alert-secondary">No fact check score available</div>'}
+        <a href="/centers" class="btn btn-primary btn-sm">View All Centers</a>
+    `;
+}
+
+// Update statistics
+function updateStats() {
+    document.getElementById('totalCenters').textContent = centersData.length;
+    document.getElementById('visibleCenters').textContent = markers.length;
+}
+
+// Update service distribution chart
+function updateServiceChart() {
+    const ctx = document.getElementById('serviceChart').getContext('2d');
+    
+    // Count services
+    const serviceCounts = {};
+    centersData.forEach(center => {
+        if (center.services) {
+            const services = center.services.toLowerCase().split('\n');
+            services.forEach(service => {
+                service = service.trim();
+                if (service) {
+                    serviceCounts[service] = (serviceCounts[service] || 0) + 1;
+                }
+            });
+        }
+    });
+    
+    const labels = Object.keys(serviceCounts);
+    const data = Object.values(serviceCounts);
+    
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: data,
+                backgroundColor: [
+                    '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        font: {
+                            size: 10
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+// Search functionality
+document.getElementById('searchInput').addEventListener('input', function(e) {
+    const searchTerm = e.target.value.toLowerCase();
+    const filteredCenters = centersData.filter(center => 
+        center.name.toLowerCase().includes(searchTerm) ||
+        center.address.toLowerCase().includes(searchTerm)
+    );
+    displayCenters(filteredCenters);
+});
+
+// Service filter
+document.getElementById('serviceFilter').addEventListener('change', function(e) {
+    const serviceFilter = e.target.value;
+    if (!serviceFilter) {
+        displayCenters(centersData);
+        return;
+    }
+    
+    const filteredCenters = centersData.filter(center => 
+        center.services && center.services.toLowerCase().includes(serviceFilter)
+    );
+    displayCenters(filteredCenters);
+});
+
+// Fact check filter
+document.getElementById('factCheckFilter').addEventListener('change', function(e) {
+    const filterValue = e.target.value;
+    if (!filterValue) {
+        displayCenters(centersData);
+        return;
+    }
+    
+    let filteredCenters;
+    switch(filterValue) {
+        case 'high':
+            filteredCenters = centersData.filter(center => center.fact_check_score >= 0.8);
+            break;
+        case 'medium':
+            filteredCenters = centersData.filter(center => 
+                center.fact_check_score >= 0.6 && center.fact_check_score < 0.8
+            );
+            break;
+        case 'low':
+            filteredCenters = centersData.filter(center => center.fact_check_score < 0.6);
+            break;
+        default:
+            filteredCenters = centersData;
+    }
+    displayCenters(filteredCenters);
+});
+
+// Reset filters
+document.getElementById('resetFilters').addEventListener('click', function() {
+    document.getElementById('searchInput').value = '';
+    document.getElementById('serviceFilter').value = '';
+    document.getElementById('factCheckFilter').value = '';
+    displayCenters(centersData);
+});
+
+// Initialize map when page loads
+document.addEventListener('DOMContentLoaded', initMap);
+</script>
+{% endblock %}

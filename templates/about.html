@@ -1,0 +1,368 @@
+{% extends "base.html" %}
+
+{% block title %}About - Jane Project{% endblock %}
+
+{% block extra_css %}
+<style>
+    .mission-section {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 15px;
+        padding: 40px;
+        margin-bottom: 40px;
+    }
+    
+    .tech-card {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 25px;
+        margin-bottom: 20px;
+        transition: transform 0.2s ease;
+    }
+    
+    .tech-card:hover {
+        transform: translateY(-5px);
+    }
+    
+    .team-member {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    .team-member img {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 15px;
+        border: 4px solid #e9ecef;
+    }
+    
+    .timeline {
+        position: relative;
+        padding-left: 30px;
+    }
+    
+    .timeline::before {
+        content: '';
+        position: absolute;
+        left: 15px;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background: #dee2e6;
+    }
+    
+    .timeline-item {
+        position: relative;
+        margin-bottom: 30px;
+    }
+    
+    .timeline-item::before {
+        content: '';
+        position: absolute;
+        left: -22px;
+        top: 5px;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: #007bff;
+        border: 3px solid white;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="mission-section text-center">
+    <h1 class="display-4 fw-bold mb-4">About Jane Project</h1>
+    <p class="lead mb-0">
+        Empowering communities with accurate information, advanced technology, and data-driven insights 
+        to combat misinformation in reproductive health advocacy.
+    </p>
+</div>
+
+<!-- Mission & Vision -->
+<div class="row mb-5">
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body p-4">
+                <h3 class="card-title text-primary mb-3">
+                    <i class="fas fa-bullseye me-2"></i>Our Mission
+                </h3>
+                <p class="card-text">
+                    The Jane Project is dedicated to providing accurate, evidence-based information about 
+                    reproductive health while combating misinformation through technology, data visualization, 
+                    and artificial intelligence. We believe in empowering communities with knowledge and tools 
+                    to make informed decisions.
+                </p>
+                <p class="card-text">
+                    Our platform serves as a comprehensive resource for advocates, researchers, and community 
+                    members seeking reliable information about Crisis Pregnancy Centers and reproductive health services.
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body p-4">
+                <h3 class="card-title text-success mb-3">
+                    <i class="fas fa-eye me-2"></i>Our Vision
+                </h3>
+                <p class="card-text">
+                    We envision a world where accurate, evidence-based information about reproductive health 
+                    is easily accessible to all communities. Through our innovative platform, we aim to:
+                </p>
+                <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <i class="fas fa-check text-success me-2"></i>
+                        Provide transparent, data-driven insights about reproductive health services
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-check text-success me-2"></i>
+                        Combat misinformation through advanced fact-checking and AI-powered analysis
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-check text-success me-2"></i>
+                        Empower advocates with comprehensive geospatial data and analytics
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-check text-success me-2"></i>
+                        Build a collaborative community of researchers and advocates
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Technology Stack -->
+<div class="row mb-5">
+    <div class="col-12">
+        <h2 class="text-center mb-4">
+            <i class="fas fa-cogs me-2"></i>Technology Stack
+        </h2>
+        <p class="text-center lead mb-5">
+            Built with modern, open-source technologies to ensure reliability, scalability, and accessibility.
+        </p>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="tech-card text-center">
+            <i class="fas fa-server fa-3x text-primary mb-3"></i>
+            <h5>Backend</h5>
+            <p class="text-muted">
+                Python Flask framework with SQLAlchemy ORM, 
+                RESTful API architecture, and secure authentication.
+            </p>
+            <div class="d-flex justify-content-center gap-2">
+                <span class="badge bg-primary">Python</span>
+                <span class="badge bg-primary">Flask</span>
+                <span class="badge bg-primary">SQLAlchemy</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="tech-card text-center">
+            <i class="fas fa-brain fa-3x text-success mb-3"></i>
+            <h5>AI & Machine Learning</h5>
+            <p class="text-muted">
+                Advanced NLP pipelines with scikit-learn, 
+                OpenAI API integration, and automated fact-checking algorithms.
+            </p>
+            <div class="d-flex justify-content-center gap-2">
+                <span class="badge bg-success">scikit-learn</span>
+                <span class="badge bg-success">OpenAI API</span>
+                <span class="badge bg-success">NLP</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="tech-card text-center">
+            <i class="fas fa-map fa-3x text-info mb-3"></i>
+            <h5>Geospatial & Frontend</h5>
+            <p class="text-muted">
+                Interactive maps with Leaflet.js, modern responsive UI with Bootstrap, 
+                and real-time data visualization.
+            </p>
+            <div class="d-flex justify-content-center gap-2">
+                <span class="badge bg-info">Leaflet.js</span>
+                <span class="badge bg-info">Bootstrap</span>
+                <span class="badge bg-info">Chart.js</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Project Timeline -->
+<div class="row mb-5">
+    <div class="col-12">
+        <h2 class="text-center mb-4">
+            <i class="fas fa-history me-2"></i>Project Timeline
+        </h2>
+        <div class="timeline">
+            <div class="timeline-item">
+                <h5>Phase 1: Foundation (Q1 2024)</h5>
+                <p class="text-muted">
+                    Initial research and planning, technology stack selection, 
+                    and core architecture development.
+                </p>
+            </div>
+            <div class="timeline-item">
+                <h5>Phase 2: Core Development (Q2 2024)</h5>
+                <p class="text-muted">
+                    Backend API development, database design, and basic frontend implementation.
+                </p>
+            </div>
+            <div class="timeline-item">
+                <h5>Phase 3: AI Integration (Q3 2024)</h5>
+                <p class="text-muted">
+                    NLP pipeline development, OpenAI API integration, and machine learning model training.
+                </p>
+            </div>
+            <div class="timeline-item">
+                <h5>Phase 4: Launch & Iteration (Q4 2024)</h5>
+                <p class="text-muted">
+                    Public beta launch, user feedback collection, and continuous improvement.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Team Section -->
+<div class="row mb-5">
+    <div class="col-12">
+        <h2 class="text-center mb-4">
+            <i class="fas fa-users me-2"></i>Our Team
+        </h2>
+        <p class="text-center lead mb-5">
+            A diverse group of developers, researchers, and advocates committed to 
+            advancing reproductive health awareness through technology.
+        </p>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="team-member">
+            <img src="https://via.placeholder.com/120x120/007bff/ffffff?text=JD" alt="Jane Doe">
+            <h5>Jane Doe</h5>
+            <p class="text-muted">Project Lead & Full-Stack Developer</p>
+            <p class="small">
+                Experienced software engineer with a passion for social justice and 
+                data-driven advocacy. Specializes in Python, Flask, and geospatial technologies.
+            </p>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="team-member">
+            <img src="https://via.placeholder.com/120x120/28a745/ffffff?text=JS" alt="John Smith">
+            <h5>John Smith</h5>
+            <p class="text-muted">AI & Machine Learning Engineer</p>
+            <p class="small">
+                ML researcher focused on NLP and fact-checking algorithms. 
+                Expert in scikit-learn, OpenAI API, and content analysis systems.
+            </p>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="team-member">
+            <img src="https://via.placeholder.com/120x120/ffc107/ffffff?text=AS" alt="Alice Johnson">
+            <h5>Alice Johnson</h5>
+            <p class="text-muted">Data Analyst & Researcher</p>
+            <p class="small">
+                Public health researcher with expertise in reproductive health data 
+                and geospatial analysis. Ensures data accuracy and meaningful insights.
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- Values & Principles -->
+<div class="row mb-5">
+    <div class="col-12">
+        <h2 class="text-center mb-4">
+            <i class="fas fa-heart me-2"></i>Our Values
+        </h2>
+    </div>
+    
+    <div class="col-md-3 mb-3">
+        <div class="card border-0 text-center h-100">
+            <div class="card-body">
+                <i class="fas fa-shield-alt fa-2x text-primary mb-3"></i>
+                <h5>Transparency</h5>
+                <p class="text-muted small">
+                    Open and honest about our data sources, methodologies, and findings.
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 mb-3">
+        <div class="card border-0 text-center h-100">
+            <div class="card-body">
+                <i class="fas fa-balance-scale fa-2x text-success mb-3"></i>
+                <h5>Accuracy</h5>
+                <p class="text-muted small">
+                    Commitment to evidence-based information and rigorous fact-checking.
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 mb-3">
+        <div class="card border-0 text-center h-100">
+            <div class="card-body">
+                <i class="fas fa-hands-helping fa-2x text-warning mb-3"></i>
+                <h5>Community</h5>
+                <p class="text-muted small">
+                    Building supportive networks and empowering local advocacy efforts.
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 mb-3">
+        <div class="card border-0 text-center h-100">
+            <div class="card-body">
+                <i class="fas fa-code fa-2x text-info mb-3"></i>
+                <h5>Innovation</h5>
+                <p class="text-muted small">
+                    Leveraging cutting-edge technology to solve complex social challenges.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Get Involved -->
+<div class="row">
+    <div class="col-12">
+        <div class="card border-0 bg-primary text-white text-center">
+            <div class="card-body p-5">
+                <h3 class="mb-3">Get Involved</h3>
+                <p class="lead mb-4">
+                    Join our mission to provide accurate information and combat misinformation 
+                    in reproductive health advocacy.
+                </p>
+                <div class="d-flex justify-content-center gap-3">
+                    <a href="{{ url_for('contact') }}" class="btn btn-light btn-lg">
+                        <i class="fas fa-envelope me-2"></i>Contact Us
+                    </a>
+                    <a href="#" class="btn btn-outline-light btn-lg">
+                        <i class="fab fa-github me-2"></i>Contribute Code
+                    </a>
+                    <a href="#" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-donate me-2"></i>Support Our Work
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

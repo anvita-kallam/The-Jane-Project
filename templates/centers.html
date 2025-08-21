@@ -1,0 +1,433 @@
+{% extends "base.html" %}
+
+{% block title %}Centers Directory - Jane Project{% endblock %}
+
+{% block extra_css %}
+<style>
+    .center-card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    
+    .center-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    .fact-check-badge {
+        font-size: 0.8rem;
+        padding: 0.25rem 0.5rem;
+    }
+    
+    .search-filters {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 30px;
+    }
+    
+    .stats-cards {
+        margin-bottom: 30px;
+    }
+    
+    .service-tag {
+        display: inline-block;
+        background: #e9ecef;
+        color: #495057;
+        padding: 0.25rem 0.5rem;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        margin: 0.1rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h1 class="mb-4">
+            <i class="fas fa-building me-2"></i>
+            Centers Directory
+        </h1>
+        <p class="lead mb-4">
+            Browse and search through our comprehensive database of Crisis Pregnancy Centers 
+            with detailed information, services, and fact-checking scores.
+        </p>
+    </div>
+</div>
+
+<!-- Statistics Cards -->
+<div class="stats-cards">
+    <div class="row">
+        <div class="col-md-3 mb-3">
+            <div class="card text-center border-0 bg-primary text-white">
+                <div class="card-body">
+                    <i class="fas fa-map-marker-alt fa-2x mb-2"></i>
+                    <h4>{{ centers|length }}</h4>
+                    <p class="mb-0">Total Centers</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card text-center border-0 bg-success text-white">
+                <div class="card-body">
+                    <i class="fas fa-check-circle fa-2x mb-2"></i>
+                    <h4 id="highScoreCount">0</h4>
+                    <p class="mb-0">High Score (80%+)</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card text-center border-0 bg-warning text-white">
+                <div class="card-body">
+                    <i class="fas fa-exclamation-triangle fa-2x mb-2"></i>
+                    <h4 id="mediumScoreCount">0</h4>
+                    <p class="mb-0">Medium Score (60-79%)</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card text-center border-0 bg-danger text-white">
+                <div class="card-body">
+                    <i class="fas fa-times-circle fa-2x mb-2"></i>
+                    <h4 id="lowScoreCount">0</h4>
+                    <p class="mb-0">Low Score (<60%)</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Search and Filters -->
+<div class="search-filters">
+    <div class="row">
+        <div class="col-md-4">
+            <label for="searchInput" class="form-label">Search Centers:</label>
+            <input type="text" id="searchInput" class="form-control" placeholder="Search by name, address, or services...">
+        </div>
+        <div class="col-md-3">
+            <label for="stateFilter" class="form-label">Filter by State:</label>
+            <select id="stateFilter" class="form-select">
+                <option value="">All States</option>
+                <!-- States will be populated dynamically -->
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label for="scoreFilter" class="form-label">Fact Check Score:</label>
+            <select id="scoreFilter" class="form-select">
+                <option value="">All Scores</option>
+                <option value="high">High (80%+)</option>
+                <option value="medium">Medium (60-79%)</option>
+                <option value="low">Low (<60%)</option>
+                <option value="none">No Score</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <label class="form-label">&nbsp;</label>
+            <button id="resetFilters" class="btn btn-outline-secondary w-100">
+                <i class="fas fa-undo me-1"></i>Reset
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Add Center Button -->
+<div class="row mb-4">
+    <div class="col-12">
+        <a href="{{ url_for('add_center') }}" class="btn btn-primary">
+            <i class="fas fa-plus me-2"></i>Add New Center
+        </a>
+        <a href="{{ url_for('map_view') }}" class="btn btn-outline-primary ms-2">
+            <i class="fas fa-map me-2"></i>View on Map
+        </a>
+    </div>
+</div>
+
+<!-- Centers Grid -->
+<div class="row" id="centersGrid">
+    {% for center in centers %}
+    <div class="col-lg-6 col-xl-4 mb-4 center-item" 
+         data-name="{{ center.name|lower }}" 
+         data-address="{{ center.address|lower }}"
+         data-services="{{ center.services|lower if center.services else '' }}"
+         data-state="{{ center.address.split(',')[-1].strip() if ',' in center.address else '' }}"
+         data-score="{{ center.fact_check_score if center.fact_check_score else 'none' }}">
+        <div class="card center-card h-100 border-0 shadow-sm">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <h5 class="card-title mb-0">{{ center.name }}</h5>
+                    {% if center.fact_check_score %}
+                        {% if center.fact_check_score >= 0.8 %}
+                            <span class="badge bg-success fact-check-badge">
+                                {{ (center.fact_check_score * 100)|round(0) }}%
+                            </span>
+                        {% elif center.fact_check_score >= 0.6 %}
+                            <span class="badge bg-warning fact-check-badge">
+                                {{ (center.fact_check_score * 100)|round(0) }}%
+                            </span>
+                        {% else %}
+                            <span class="badge bg-danger fact-check-badge">
+                                {{ (center.fact_check_score * 100)|round(0) }}%
+                            </span>
+                        {% endif %}
+                    {% else %}
+                        <span class="badge bg-secondary fact-check-badge">No Score</span>
+                    {% endif %}
+                </div>
+                
+                <p class="card-text text-muted mb-2">
+                    <i class="fas fa-map-marker-alt me-1"></i>
+                    {{ center.address }}
+                </p>
+                
+                {% if center.phone %}
+                <p class="card-text mb-2">
+                    <i class="fas fa-phone me-1"></i>
+                    <a href="tel:{{ center.phone }}" class="text-decoration-none">{{ center.phone }}</a>
+                </p>
+                {% endif %}
+                
+                {% if center.website %}
+                <p class="card-text mb-2">
+                    <i class="fas fa-globe me-1"></i>
+                    <a href="{{ center.website }}" target="_blank" class="text-decoration-none">{{ center.website }}</a>
+                </p>
+                {% endif %}
+                
+                {% if center.services %}
+                <div class="mb-3">
+                    <strong>Services:</strong>
+                    <div class="mt-1">
+                        {% for service in center.services.split('\n') %}
+                            {% if service.strip() %}
+                                <span class="service-tag">{{ service.strip() }}</span>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+                
+                <div class="d-flex justify-content-between align-items-center">
+                    <small class="text-muted">
+                        <i class="fas fa-calendar me-1"></i>
+                        Added {{ center.created_at.strftime('%b %Y') if center.created_at else 'Recently' }}
+                    </small>
+                    <div>
+                        <a href="#" class="btn btn-sm btn-outline-primary" onclick="showCenterDetails({{ center.id }})">
+                            <i class="fas fa-info-circle me-1"></i>Details
+                        </a>
+                        <a href="{{ url_for('map_view') }}?center={{ center.id }}" class="btn btn-sm btn-outline-secondary">
+                            <i class="fas fa-map me-1"></i>Map
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- No Results Message -->
+<div id="noResults" class="text-center py-5" style="display: none;">
+    <i class="fas fa-search fa-3x text-muted mb-3"></i>
+    <h4 class="text-muted">No centers found</h4>
+    <p class="text-muted">Try adjusting your search criteria or filters.</p>
+</div>
+
+<!-- Center Details Modal -->
+<div class="modal fade" id="centerModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Center Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="centerModalBody">
+                <!-- Content will be loaded here -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <a href="#" class="btn btn-primary" id="modalMapLink">View on Map</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let centersData = {{ centers|tojson }};
+let filteredCenters = centersData;
+
+// Initialize page
+document.addEventListener('DOMContentLoaded', function() {
+    updateStats();
+    populateStateFilter();
+    setupEventListeners();
+});
+
+// Update statistics
+function updateStats() {
+    const highScore = centersData.filter(c => c.fact_check_score && c.fact_check_score >= 0.8).length;
+    const mediumScore = centersData.filter(c => c.fact_check_score && c.fact_check_score >= 0.6 && c.fact_check_score < 0.8).length;
+    const lowScore = centersData.filter(c => c.fact_check_score && c.fact_check_score < 0.6).length;
+    
+    document.getElementById('highScoreCount').textContent = highScore;
+    document.getElementById('mediumScoreCount').textContent = mediumScore;
+    document.getElementById('lowScoreCount').textContent = lowScore;
+}
+
+// Populate state filter
+function populateStateFilter() {
+    const states = new Set();
+    centersData.forEach(center => {
+        if (center.address && center.address.includes(',')) {
+            const state = center.address.split(',').pop().trim();
+            if (state) states.add(state);
+        }
+    });
+    
+    const stateFilter = document.getElementById('stateFilter');
+    Array.from(states).sort().forEach(state => {
+        const option = document.createElement('option');
+        option.value = state;
+        option.textContent = state;
+        stateFilter.appendChild(option);
+    });
+}
+
+// Setup event listeners
+function setupEventListeners() {
+    document.getElementById('searchInput').addEventListener('input', filterCenters);
+    document.getElementById('stateFilter').addEventListener('change', filterCenters);
+    document.getElementById('scoreFilter').addEventListener('change', filterCenters);
+    document.getElementById('resetFilters').addEventListener('click', resetFilters);
+}
+
+// Filter centers
+function filterCenters() {
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+    const stateFilter = document.getElementById('stateFilter').value;
+    const scoreFilter = document.getElementById('scoreFilter').value;
+    
+    filteredCenters = centersData.filter(center => {
+        // Search term filter
+        const matchesSearch = !searchTerm || 
+            center.name.toLowerCase().includes(searchTerm) ||
+            center.address.toLowerCase().includes(searchTerm) ||
+            (center.services && center.services.toLowerCase().includes(searchTerm));
+        
+        // State filter
+        const matchesState = !stateFilter || 
+            (center.address && center.address.includes(stateFilter));
+        
+        // Score filter
+        let matchesScore = true;
+        if (scoreFilter) {
+            if (scoreFilter === 'high') {
+                matchesScore = center.fact_check_score && center.fact_check_score >= 0.8;
+            } else if (scoreFilter === 'medium') {
+                matchesScore = center.fact_check_score && center.fact_check_score >= 0.6 && center.fact_check_score < 0.8;
+            } else if (scoreFilter === 'low') {
+                matchesScore = center.fact_check_score && center.fact_check_score < 0.6;
+            } else if (scoreFilter === 'none') {
+                matchesScore = !center.fact_check_score;
+            }
+        }
+        
+        return matchesSearch && matchesState && matchesScore;
+    });
+    
+    displayFilteredCenters();
+}
+
+// Display filtered centers
+function displayFilteredCenters() {
+    const centersGrid = document.getElementById('centersGrid');
+    const noResults = document.getElementById('noResults');
+    
+    if (filteredCenters.length === 0) {
+        centersGrid.style.display = 'none';
+        noResults.style.display = 'block';
+    } else {
+        centersGrid.style.display = 'block';
+        noResults.style.display = 'none';
+        
+        // Show/hide center items based on filter
+        document.querySelectorAll('.center-item').forEach((item, index) => {
+            if (index < filteredCenters.length) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    }
+}
+
+// Reset filters
+function resetFilters() {
+    document.getElementById('searchInput').value = '';
+    document.getElementById('stateFilter').value = '';
+    document.getElementById('scoreFilter').value = '';
+    filteredCenters = centersData;
+    displayFilteredCenters();
+}
+
+// Show center details modal
+function showCenterDetails(centerId) {
+    const center = centersData.find(c => c.id === centerId);
+    if (!center) return;
+    
+    const modalBody = document.getElementById('centerModalBody');
+    const modalMapLink = document.getElementById('modalMapLink');
+    
+    modalBody.innerHTML = `
+        <div class="row">
+            <div class="col-md-8">
+                <h4 class="text-primary">${center.name}</h4>
+                <p class="text-muted mb-3">
+                    <i class="fas fa-map-marker-alt me-2"></i>${center.address}
+                </p>
+                
+                ${center.phone ? `
+                    <p><i class="fas fa-phone me-2"></i><a href="tel:${center.phone}">${center.phone}</a></p>
+                ` : ''}
+                
+                ${center.website ? `
+                    <p><i class="fas fa-globe me-2"></i><a href="${center.website}" target="_blank">${center.website}</a></p>
+                ` : ''}
+                
+                ${center.services ? `
+                    <div class="mb-3">
+                        <h6>Services Offered:</h6>
+                        <ul>
+                            ${center.services.split('\n').map(s => `<li>${s.trim()}</li>`).join('')}
+                        </ul>
+                    </div>
+                ` : ''}
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h6>Fact Check Score</h6>
+                        ${center.fact_check_score ? `
+                            <div class="display-4 text-${center.fact_check_score >= 0.8 ? 'success' : center.fact_check_score >= 0.6 ? 'warning' : 'danger'}">
+                                ${(center.fact_check_score * 100).toFixed(0)}%
+                            </div>
+                            <p class="text-muted">
+                                ${center.fact_check_score >= 0.8 ? 'High Accuracy' : center.fact_check_score >= 0.6 ? 'Medium Accuracy' : 'Low Accuracy'}
+                            </p>
+                        ` : '<p class="text-muted">No score available</p>'}
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    modalMapLink.href = `/map?center=${center.id}`;
+    
+    const modal = new bootstrap.Modal(document.getElementById('centerModal'));
+    modal.show();
+}
+</script>
+{% endblock %}

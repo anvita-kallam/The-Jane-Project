@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+
+{% block title %}Jane Project - Home{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="hero-section text-center py-5 mb-5">
+    <div class="container">
+        <h1 class="display-4 fw-bold text-primary mb-4">
+            <i class="fas fa-heart-pulse me-3"></i>
+            Jane Project
+        </h1>
+        <p class="lead mb-4">
+            An open-source advocacy platform empowering communities with accurate information, 
+            geospatial data visualization, and AI-powered fact-checking for reproductive health awareness.
+        </p>
+        <div class="d-flex justify-content-center gap-3">
+            <a href="{{ url_for('map_view') }}" class="btn btn-primary btn-lg">
+                <i class="fas fa-map me-2"></i>Explore Map
+            </a>
+            <a href="{{ url_for('content_analysis') }}" class="btn btn-outline-primary btn-lg">
+                <i class="fas fa-brain me-2"></i>Content Analysis
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="row mb-5">
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body text-center p-4">
+                <div class="feature-icon mb-3">
+                    <i class="fas fa-map-marked-alt fa-3x text-primary"></i>
+                </div>
+                <h4 class="card-title">Geospatial Visualization</h4>
+                <p class="card-text">
+                    Interactive maps powered by Leaflet.js showing Crisis Pregnancy Centers 
+                    with detailed location data and service information.
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body text-center p-4">
+                <div class="feature-icon mb-3">
+                    <i class="fas fa-brain fa-3x text-primary"></i>
+                </div>
+                <h4 class="card-title">AI-Powered Analysis</h4>
+                <p class="card-text">
+                    Advanced NLP pipelines using scikit-learn for content classification, 
+                    sentiment analysis, and automated fact-checking.
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body text-center p-4">
+                <div class="feature-icon mb-3">
+                    <i class="fas fa-robot fa-3x text-primary"></i>
+                </div>
+                <h4 class="card-title">OpenAI Integration</h4>
+                <p class="card-text">
+                    AI-assisted content generation and fact-checking powered by OpenAI's 
+                    advanced language models for accurate information.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Statistics Section -->
+<div class="row mb-5">
+    <div class="col-12">
+        <h2 class="text-center mb-4">Platform Impact</h2>
+        <div class="row text-center">
+            <div class="col-md-3 mb-3">
+                <div class="stat-card p-3">
+                    <i class="fas fa-map-marker-alt fa-2x text-primary mb-2"></i>
+                    <h3 class="stat-number" data-target="150">0</h3>
+                    <p class="text-muted">Centers Mapped</p>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="stat-card p-3">
+                    <i class="fas fa-file-alt fa-2x text-primary mb-2"></i>
+                    <h3 class="stat-number" data-target="500">0</h3>
+                    <p class="text-muted">Content Analyzed</p>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="stat-card p-3">
+                    <i class="fas fa-check-circle fa-2x text-primary mb-2"></i>
+                    <h3 class="stat-number" data-target="95">0</h3>
+                    <p class="text-muted">Accuracy Rate</p>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="stat-card p-3">
+                    <i class="fas fa-users fa-2x text-primary mb-2"></i>
+                    <h3 class="stat-number" data-target="1000">0</h3>
+                    <p class="text-muted">Users Served</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Mission Statement -->
+<div class="row mb-5">
+    <div class="col-12">
+        <div class="card border-0 bg-light">
+            <div class="card-body p-5 text-center">
+                <h2 class="mb-4">Our Mission</h2>
+                <p class="lead mb-0">
+                    The Jane Project is dedicated to providing accurate, evidence-based information 
+                    about reproductive health while combating misinformation through technology, 
+                    data visualization, and artificial intelligence. We believe in empowering 
+                    communities with knowledge and tools to make informed decisions.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Call to Action -->
+<div class="row">
+    <div class="col-12 text-center">
+        <div class="cta-section p-5 bg-primary text-white rounded">
+            <h3 class="mb-3">Join the Movement</h3>
+            <p class="mb-4">
+                Help us build a more informed and empowered community. 
+                Contribute data, analyze content, or simply explore our platform.
+            </p>
+            <a href="{{ url_for('about') }}" class="btn btn-light btn-lg">
+                Learn More
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Animate statistics on scroll
+function animateStats() {
+    const stats = document.querySelectorAll('.stat-number');
+    stats.forEach(stat => {
+        const target = parseInt(stat.getAttribute('data-target'));
+        const increment = target / 100;
+        let current = 0;
+        
+        const updateStat = () => {
+            if (current < target) {
+                current += increment;
+                stat.textContent = Math.ceil(current);
+                setTimeout(updateStat, 20);
+            } else {
+                stat.textContent = target;
+            }
+        };
+        
+        updateStat();
+    });
+}
+
+// Trigger animation when page loads
+document.addEventListener('DOMContentLoaded', animateStats);
+</script>
+{% endblock %}

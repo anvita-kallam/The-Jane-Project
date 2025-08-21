@@ -1,0 +1,388 @@
+{% extends "base.html" %}
+
+{% block title %}Content Analysis - Jane Project{% endblock %}
+
+{% block extra_css %}
+<style>
+    .analysis-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 15px;
+        padding: 30px;
+        margin-bottom: 30px;
+    }
+    
+    .result-card {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 25px;
+        margin-top: 20px;
+    }
+    
+    .analysis-type-selector {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 30px;
+    }
+    
+    .confidence-meter {
+        background: #e9ecef;
+        border-radius: 10px;
+        height: 20px;
+        overflow: hidden;
+        margin: 10px 0;
+    }
+    
+    .confidence-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #dc3545, #ffc107, #28a745);
+        transition: width 0.5s ease;
+    }
+    
+    .sentiment-indicator {
+        font-size: 2rem;
+        margin: 10px 0;
+    }
+    
+    .fact-check-score {
+        font-size: 3rem;
+        font-weight: bold;
+        text-align: center;
+        margin: 20px 0;
+    }
+    
+    .ai-content-box {
+        background: #f8f9fa;
+        border-left: 4px solid #007bff;
+        padding: 15px;
+        border-radius: 5px;
+        margin: 15px 0;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h1 class="mb-4">
+            <i class="fas fa-brain me-2"></i>
+            Content Analysis
+        </h1>
+        <p class="lead mb-4">
+            Analyze content using advanced NLP pipelines, sentiment analysis, fact-checking algorithms, 
+            and AI-powered content generation to identify misinformation and provide accurate information.
+        </p>
+    </div>
+</div>
+
+<!-- Analysis Type Selector -->
+<div class="analysis-type-selector">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="text-center">
+                <i class="fas fa-tags fa-2x text-primary mb-2"></i>
+                <h6>Classification</h6>
+                <small class="text-muted">Categorize content by type</small>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="text-center">
+                <i class="fas fa-smile fa-2x text-warning mb-2"></i>
+                <h6>Sentiment</h6>
+                <small class="text-muted">Analyze emotional tone</small>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="text-center">
+                <i class="fas fa-check-circle fa-2x text-success mb-2"></i>
+                <h6>Fact Check</h6>
+                <small class="text-muted">Verify information accuracy</small>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="text-center">
+                <i class="fas fa-robot fa-2x text-info mb-2"></i>
+                <h6>AI Generation</h6>
+                <small class="text-muted">Generate fact-checked content</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Analysis Form -->
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-4">
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+                    
+                    <div class="mb-4">
+                        <label for="{{ form.analysis_type.id }}" class="form-label">
+                            <i class="fas fa-cogs me-2"></i>Analysis Type
+                        </label>
+                        {{ form.analysis_type(class="form-select form-select-lg") }}
+                        {% if form.analysis_type.errors %}
+                            <div class="text-danger">
+                                {% for error in form.analysis_type.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="{{ form.content.id }}" class="form-label">
+                            <i class="fas fa-file-alt me-2"></i>Content to Analyze
+                        </label>
+                        {{ form.content(class="form-control", rows="8", placeholder="Enter the content you want to analyze...") }}
+                        {% if form.content.errors %}
+                            <div class="text-danger">
+                                {% for error in form.content.errors %}
+                                    <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <div class="form-text">
+                            <i class="fas fa-info-circle me-1"></i>
+                            Enter text content such as website copy, social media posts, or any written material you'd like to analyze.
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid">
+                        {{ form.submit(class="btn btn-primary btn-lg") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="card border-0 bg-light">
+            <div class="card-body p-4">
+                <h5 class="card-title">
+                    <i class="fas fa-lightbulb me-2"></i>
+                    Analysis Tips
+                </h5>
+                <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <i class="fas fa-check text-success me-2"></i>
+                        <strong>Classification:</strong> Best for categorizing content types
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-check text-success me-2"></i>
+                        <strong>Sentiment:</strong> Analyze emotional tone and bias
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-check text-success me-2"></i>
+                        <strong>Fact Check:</strong> Identify potential misinformation
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-check text-success me-2"></i>
+                        <strong>AI Generation:</strong> Get fact-checked alternatives
+                    </li>
+                </ul>
+                
+                <hr>
+                
+                <h6 class="text-muted">Example Content:</h6>
+                <div class="bg-white p-3 rounded">
+                    <small class="text-muted">
+                        "Free pregnancy tests and ultrasounds available. 
+                        We provide accurate medical information and support."
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Results Display -->
+{% if results %}
+<div class="result-card">
+    <h3 class="mb-4">
+        <i class="fas fa-chart-line me-2"></i>
+        Analysis Results: {{ results.type }}
+    </h3>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <h6><i class="fas fa-file-alt me-2"></i>Original Content:</h6>
+            <div class="bg-light p-3 rounded mb-3">
+                {{ results.content }}
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            {% if results.type == 'Classification' %}
+                <h6><i class="fas fa-tag me-2"></i>Classification Result:</h6>
+                <div class="alert alert-info">
+                    <strong>{{ results.classification }}</strong>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Confidence Level:</label>
+                    <div class="confidence-meter">
+                        <div class="confidence-fill" style="width: {{ results.confidence }}"></div>
+                    </div>
+                    <small class="text-muted">{{ results.confidence }}</small>
+                </div>
+                
+            {% elif results.type == 'Sentiment Analysis' %}
+                <h6><i class="fas fa-smile me-2"></i>Sentiment Result:</h6>
+                <div class="text-center">
+                    {% if results.sentiment == 'Positive' %}
+                        <div class="sentiment-indicator text-success">😊</div>
+                    {% elif results.sentiment == 'Negative' %}
+                        <div class="sentiment-indicator text-danger">😞</div>
+                    {% else %}
+                        <div class="sentiment-indicator text-secondary">😐</div>
+                    {% endif %}
+                    <h5 class="text-{{ 'success' if results.sentiment == 'Positive' else 'danger' if results.sentiment == 'Negative' else 'secondary' }}">
+                        {{ results.sentiment }}
+                    </h5>
+                    <p class="text-muted">Score: {{ results.score }}</p>
+                </div>
+                
+            {% elif results.type == 'Fact Check' %}
+                <h6><i class="fas fa-check-circle me-2"></i>Fact Check Result:</h6>
+                <div class="text-center">
+                    {% set score_num = results.score|float %}
+                    {% if score_num >= 0.8 %}
+                        <div class="fact-check-score text-success">{{ (score_num * 100)|round(0) }}%</div>
+                        <div class="alert alert-success">
+                            <i class="fas fa-thumbs-up me-2"></i>
+                            {{ results.result }}
+                        </div>
+                    {% elif score_num >= 0.6 %}
+                        <div class="fact-check-score text-warning">{{ (score_num * 100)|round(0) }}%</div>
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            {{ results.result }}
+                        </div>
+                    {% else %}
+                        <div class="fact-check-score text-danger">{{ (score_num * 100)|round(0) }}%</div>
+                        <div class="alert alert-danger">
+                            <i class="fas fa-times-circle me-2"></i>
+                            {{ results.result }}
+                        </div>
+                    {% endif %}
+                </div>
+                
+            {% elif results.type == 'AI Content Generation' %}
+                <h6><i class="fas fa-robot me-2"></i>AI Generated Content:</h6>
+                {% if results.ai_content %}
+                    <div class="ai-content-box">
+                        <p class="mb-0">{{ results.ai_content }}</p>
+                    </div>
+                    <div class="alert alert-info mt-3">
+                        <i class="fas fa-info-circle me-2"></i>
+                        This AI-generated content is designed to provide accurate, evidence-based information 
+                        while addressing any inaccuracies in the original content.
+                    </div>
+                {% else %}
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        {{ results.error }}
+                    </div>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="mt-4">
+        <a href="{{ url_for('content_analysis') }}" class="btn btn-outline-primary">
+            <i class="fas fa-plus me-2"></i>Analyze New Content
+        </a>
+        <button class="btn btn-outline-secondary" onclick="window.print()">
+            <i class="fas fa-print me-2"></i>Print Results
+        </button>
+    </div>
+</div>
+{% endif %}
+
+<!-- Recent Analysis History -->
+<div class="row mt-5">
+    <div class="col-12">
+        <h4 class="mb-3">
+            <i class="fas fa-history me-2"></i>
+            Recent Analysis History
+        </h4>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>Date</th>
+                        <th>Content Preview</th>
+                        <th>Type</th>
+                        <th>Result</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- This would be populated with actual data from the database -->
+                    <tr>
+                        <td colspan="5" class="text-center text-muted">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Analysis history will appear here after you perform analyses
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Real-time character count
+document.getElementById('{{ form.content.id }}').addEventListener('input', function(e) {
+    const content = e.target.value;
+    const charCount = content.length;
+    
+    // Update character count display if it exists
+    let charCountDisplay = document.getElementById('charCount');
+    if (!charCountDisplay) {
+        charCountDisplay = document.createElement('div');
+        charCountDisplay.id = 'charCount';
+        charCountDisplay.className = 'form-text text-end';
+        e.target.parentNode.appendChild(charCountDisplay);
+    }
+    
+    charCountDisplay.textContent = `${charCount} characters`;
+    
+    // Add visual feedback for content length
+    if (charCount < 10) {
+        e.target.classList.add('is-invalid');
+        charCountDisplay.innerHTML = '<i class="fas fa-exclamation-triangle text-warning me-1"></i>Content too short for meaningful analysis';
+    } else {
+        e.target.classList.remove('is-invalid');
+        charCountDisplay.innerHTML = `${charCount} characters`;
+    }
+});
+
+// Auto-resize textarea
+document.getElementById('{{ form.content.id }}').addEventListener('input', function() {
+    this.style.height = 'auto';
+    this.style.height = (this.scrollHeight) + 'px';
+});
+
+// Analysis type change handler
+document.getElementById('{{ form.analysis_type.id }}').addEventListener('change', function(e) {
+    const selectedType = e.target.value;
+    const contentField = document.getElementById('{{ form.content.id }}');
+    
+    // Update placeholder text based on analysis type
+    const placeholders = {
+        'classification': 'Enter content to classify (e.g., website text, social media posts)...',
+        'sentiment': 'Enter content to analyze sentiment (e.g., reviews, comments, articles)...',
+        'fact_check': 'Enter content to fact-check (e.g., claims, statements, news)...',
+        'ai_generation': 'Enter content that needs fact-checked alternatives or corrections...'
+    };
+    
+    contentField.placeholder = placeholders[selectedType] || 'Enter the content you want to analyze...';
+});
+</script>
+{% endblock %}

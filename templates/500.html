@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}Server Error - Jane Project{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 text-center">
+        <div class="py-5">
+            <h1 class="display-1 text-danger">500</h1>
+            <h2 class="mb-4">Server Error</h2>
+            <p class="lead mb-4">
+                We're experiencing some technical difficulties. Our team has been notified 
+                and is working to resolve the issue as quickly as possible.
+            </p>
+            
+            <div class="mb-4">
+                <i class="fas fa-exclamation-triangle fa-3x text-warning mb-3"></i>
+            </div>
+            
+            <div class="alert alert-info mb-4">
+                <h5><i class="fas fa-info-circle me-2"></i>What happened?</h5>
+                <p class="mb-0">
+                    Something went wrong on our end. This could be due to a temporary server issue, 
+                    database connection problem, or unexpected error in our application.
+                </p>
+            </div>
+            
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <h5>Try These Solutions</h5>
+                    <ul class="list-unstyled text-start">
+                        <li><i class="fas fa-refresh me-2 text-primary"></i>Refresh the page</li>
+                        <li><i class="fas fa-clock me-2 text-primary"></i>Wait a few minutes and try again</li>
+                        <li><i class="fas fa-trash me-2 text-primary"></i>Clear your browser cache</li>
+                        <li><i class="fas fa-home me-2 text-primary"></i>Go back to the homepage</li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <h5>Still Having Issues?</h5>
+                    <ul class="list-unstyled text-start">
+                        <li><i class="fas fa-envelope me-2 text-primary"></i>Contact our support team</li>
+                        <li><i class="fas fa-bug me-2 text-primary"></i>Report the bug to our developers</li>
+                        <li><i class="fas fa-twitter me-2 text-primary"></i>Check our status page</li>
+                        <li><i class="fas fa-question-circle me-2 text-primary"></i>Visit our help center</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="d-flex justify-content-center gap-3">
+                <button onclick="location.reload()" class="btn btn-primary">
+                    <i class="fas fa-refresh me-2"></i>Try Again
+                </button>
+                <a href="{{ url_for('index') }}" class="btn btn-outline-primary">
+                    <i class="fas fa-home me-2"></i>Go Home
+                </a>
+                <a href="{{ url_for('contact') }}" class="btn btn-outline-danger">
+                    <i class="fas fa-exclamation-triangle me-2"></i>Report Issue
+                </a>
+            </div>
+            
+            <div class="mt-4">
+                <small class="text-muted">
+                    Error ID: {{ request.id if request.id else 'Unknown' }} | 
+                    Time: {{ moment().format('YYYY-MM-DD HH:mm:ss') if moment else 'Unknown' }}
+                </small>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
