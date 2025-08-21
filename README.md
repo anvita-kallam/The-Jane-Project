@@ -56,24 +56,6 @@ janeProj/
 ```
 
 
-## 🧠 AI Features
-
-### Content Classification
-The platform uses a trained scikit-learn model to classify content into categories:
-- Medical services
-- Information provision
-- Counseling services
-- Misinformation detection
-- Accurate information
-- Manipulation tactics
-
-### Fact-Checking Algorithm
-Our fact-checking system analyzes content for:
-- Suspicious keywords and phrases
-- Emotional manipulation indicators
-- Inconsistent claims
-- Source credibility assessment
-
 ### OpenAI Integration
 - **Content Generation**: Fact-checked alternatives to problematic content
 - **Information Enhancement**: AI-powered content improvement
