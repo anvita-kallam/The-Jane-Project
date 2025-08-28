@@ -56,12 +56,6 @@ janeProj/
 ```
 
 
-### OpenAI Integration
-- **Content Generation**: Fact-checked alternatives to problematic content
-- **Information Enhancement**: AI-powered content improvement
-- **Bias Detection**: Advanced language model analysis
-
-## 🗄Database Schema
 
 ### CPCCenter Model
 ```python
