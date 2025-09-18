@@ -1,6 +1,6 @@
 # The Jane Project
 
-An open-source advocacy platform empowering communities with accurate information, geospatial data visualization, and AI-powered fact-checking for reproductive health awareness.
+An open-source advocacy platform that empowers communities with accurate information, geospatial data visualization, and AI-powered fact-checking for reproductive health awareness.
 
 ## Features
 
