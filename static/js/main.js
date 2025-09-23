@@ -519,7 +519,7 @@ window.JaneProject = {
 console.log(`
 %cJane Project%c
 %cWelcome to the Jane Project web application!
-%cBuilt with Flask, Python, and modern web technologies.
+%cBuilt with Flask, Python, and several other modern web technologies.
 %cFor support, visit our documentation or contact our team.
 
 `, 
