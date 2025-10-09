@@ -518,7 +518,7 @@ window.JaneProject = {
 // Console welcome message
 console.log(`
 %cJane Project%c
-%cWelcome to the Jane Project web application!
+%cWelcome to the Jane Project's web application!
 %cBuilt with Flask, Python, and several other modern web technologies.
 %cFor support, visit our documentation or contact our team.
 
